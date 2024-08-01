@@ -1,9 +1,27 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
-def home(request):
-    return HttpResponse('<h1> Blog Home </h1>')
+posts = [
+    {
+        'author': 'saurav tripathi',
+        'title': 'Blog Post 1 ',
+        'content': 'First post in django',
+        'date_posted': 'August 27 90392'
+    },
+    {
+        'author': 'saurav tripathi',
+        'title': 'Post 2  ',
+        'content': 'Second test post',
+        'date_posted': 'July 12 1832'
+    }
+]
 
+def home(request):
+    context = {
+        'posts': posts
+    }
+    return render(request, 'blog/home.html', context)
 
 def about(request):
-    return HttpResponse('<h1> Blog About</h1>')
+    return render(request, 'blog/about.html')
+
