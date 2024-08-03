@@ -8,7 +8,8 @@ from .views import( PostListView,
                     UploadMarkdownView,
                     CategoryPostListView,
 					search,
-                    robots_txt
+                    robots_txt,
+					upload_markdown,
                     )
 from . import views
 
@@ -25,5 +26,6 @@ urlpatterns = [
     path('robots.txt', robots_txt, name='robots-txt'),
     path('category/<str:category>/', CategoryPostListView.as_view(), name='category-posts'),
 	path('search/', search, name='search'),
+	path('api/upload/', upload_markdown, name='api-upload-markdown'),
 ]
 

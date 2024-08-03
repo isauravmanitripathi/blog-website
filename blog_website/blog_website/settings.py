@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'django.contrib.sitemaps',
     'users.apps.UsersConfig',
+	'rest_framework', # rest framework
+	'rest_framework.authtoken', # authentication token generation
     'crispy_forms',
     'crispy_bootstrap4', # very important line to add
     'django.contrib.admin',
@@ -59,6 +61,15 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'blog_website.urls'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
 
 TEMPLATES = [
     {

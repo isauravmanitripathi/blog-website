@@ -11,6 +11,14 @@ import markdown
 import logging
 from .models import Post
 from .forms import MarkdownUploadForm
+from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from .models import Post
+from .serializers import PostSerializer
+from django.core.files.base import ContentFile
+
 
 def get_categories():
     return dict(Post.CATEGORY_CHOICES)
@@ -167,3 +175,20 @@ def search(request):
     if query:
         results = index.search(query)['hits']
     return render(request, 'blog/search_results.html', {'results': results, 'query': query})
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def upload_markdown(request):
+    title = request.data.get('title')
+    category = request.data.get('category')
+    file = request.FILES.get('file')
+
+    if not title or not category or not file:
+        return Response({"error": "Title, category, and file are required."}, status=status.HTTP_400_BAD_REQUEST)
+    
+    content = file.read().decode('utf-8')
+    
+    post = Post(title=title, content=content, category=category, author=request.user)
+    post.save()
+
+    return Response({"success": "Post created successfully"}, status=status.HTTP_201_CREATED)
