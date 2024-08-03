@@ -22,6 +22,6 @@ class Post(models.Model):
     def get_snippet(self):
         if self.content_html:
             return self.content_html[:200] + '...' if len(self.content_html) > 200 else self.content_html
-        return ''
+        return self.content[:200] + '...' if len(self.content) > 200 else self.content
     def get_absolute_url(self):
         return reverse('post-detail', kwargs={'pk': self.pk})
