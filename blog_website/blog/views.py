@@ -9,9 +9,13 @@ from django.http import HttpResponse
 from .forms import MarkdownUploadForm
 import markdown
 
+def get_categories():
+    return dict(Post.CATEGORY_CHOICES)
+
 def home(request):
     context = {
-        'posts': Post.objects.all()
+        'posts': Post.objects.all(),
+        'categories': get_categories()
     }
     return render(request, 'blog/home.html', context)
 
@@ -21,6 +25,11 @@ class PostListView(ListView):
     context_object_name = 'posts'
     ordering = ['-date_posted']
     paginate_by = 10
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = get_categories()
+        return context
 
 class UserPostListView(ListView):
     model = Post
@@ -33,6 +42,11 @@ class UserPostListView(ListView):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
         return Post.objects.filter(author=user).order_by('-date_posted')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = get_categories()
+        return context
+
 class CategoryPostListView(ListView):
     model = Post
     template_name = 'blog/category_posts.html'
@@ -43,20 +57,36 @@ class CategoryPostListView(ListView):
         category = self.kwargs.get('category')
         return Post.objects.filter(category=category).order_by('-date_posted')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = get_categories()
+        context['category'] = self.kwargs['category']
+        return context
+
 class PostDetailView(DetailView):
     model = Post
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = get_categories()
+        return context
+
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    fields = ['title', 'content']
+    fields = ['title', 'content', 'category']
 
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = get_categories()
+        return context
+
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
-    fields = ['title', 'content']
+    fields = ['title', 'content', 'category']
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -67,6 +97,11 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         if self.request.user == post.author:
             return True
         return False
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = get_categories()
+        return context
 
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
@@ -80,13 +115,18 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         return False
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = get_categories()
+        return context
+
 def about(request):
-    return render(request, 'blog/about.html', {'title': 'About'})
+    return render(request, 'blog/about.html', {'title': 'About', 'categories': get_categories()})
 
 class UploadMarkdownView(LoginRequiredMixin, View):
     def get(self, request):
         form = MarkdownUploadForm()
-        return render(request, 'blog/upload_markdown.html', {'form': form})
+        return render(request, 'blog/upload_markdown.html', {'form': form, 'categories': get_categories()})
 
     def post(self, request):
         form = MarkdownUploadForm(request.POST, request.FILES)
@@ -106,7 +146,8 @@ class UploadMarkdownView(LoginRequiredMixin, View):
             post.content_html = content_html  # Set the content_html field separately
             post.save()
             return redirect('post-detail', slug=post.slug)
-        return render(request, 'blog/upload_markdown.html', {'form': form})
+        return render(request, 'blog/upload_markdown.html', {'form': form, 'categories': get_categories()})
+
 def robots_txt(request):
     lines = [
         "User-Agent: *",

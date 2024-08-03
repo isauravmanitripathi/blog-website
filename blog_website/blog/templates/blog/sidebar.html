@@ -1,11 +1,11 @@
 <!-- blog/templates/blog/sidebar.html -->
 <div class="sidebar-section">
-    <h3>Our Sidebar</h3>
-    <p>You can put any information here you'd like.</p>
-    <ul>
-        <li><a href="#">Latest Posts</a></li>
-        <li><a href="#">Announcements</a></li>
-        <li><a href="#">Calendars</a></li>
-        <li><a href="#">etc</a></li>
-    </ul>
+    <h3>Categories</h3>
+    <div class="categories">
+        {% for key, value in categories.items %}
+            <div class="category-item">
+                <a href="{% url 'category-posts' key %}">{{ value }}</a>
+            </div>
+        {% endfor %}
+    </div>
 </div>

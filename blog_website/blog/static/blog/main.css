@@ -93,3 +93,33 @@ ul {
   top: 20px;
   padding-top: 20px;
 }
+
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.category-item {
+  background: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  padding: 10px;
+  text-align: center;
+  width: calc(50% - 10px); /* Two items per row */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.category-item:hover {
+  background-color: #f9f9f9;
+}
+
+.category-item a {
+  text-decoration: none;
+  color: #333333;
+}
+
+.category-item a:hover {
+  color: #000000;
+}
