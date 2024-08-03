@@ -61,6 +61,8 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
     success_url = '/'
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
 
     def test_func(self):
         post = self.get_object()
@@ -91,7 +93,7 @@ class UploadMarkdownView(LoginRequiredMixin, View):
             )
             post.content_html = content_html  # Set the content_html field separately
             post.save()
-            return redirect('post-detail', pk=post.pk)
+            return redirect('post-detail', slug=post.slug)
         return render(request, 'blog/upload_markdown.html', {'form': form})
 
 def robots_txt(request):
