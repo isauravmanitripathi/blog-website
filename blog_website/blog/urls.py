@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, UserPostListView, UploadMarkdownView
+from .views import PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, UserPostListView, UploadMarkdownView, robots_txt
 from . import views
 
 urlpatterns = [
@@ -12,5 +12,6 @@ urlpatterns = [
     path('upload/', UploadMarkdownView.as_view(), name='upload-markdown'),
     #path('', views.home, name='blog-home'),
     path('about/', views.about, name='blog-about'),
+    path('robots.txt', robots_txt, name='robots-txt'),
 ]
 

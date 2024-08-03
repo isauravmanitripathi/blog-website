@@ -93,3 +93,11 @@ class UploadMarkdownView(LoginRequiredMixin, View):
             post.save()
             return redirect('post-detail', pk=post.pk)
         return render(request, 'blog/upload_markdown.html', {'form': form})
+
+def robots_txt(request):
+    lines = [
+        "User-Agent: *",
+        "Disallow: /admin/",
+        "Sitemap: http://127.0.0.1:8000/sitemap.xml",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
