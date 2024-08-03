@@ -33,6 +33,16 @@ class UserPostListView(ListView):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
         return Post.objects.filter(author=user).order_by('-date_posted')
 
+class CategoryPostListView(ListView):
+    model = Post
+    template_name = 'blog/category_posts.html'
+    context_object_name = 'posts'
+    paginate_by = 10
+
+    def get_queryset(self):
+        category = self.kwargs.get('category')
+        return Post.objects.filter(category=category).order_by('-date_posted')
+
 class PostDetailView(DetailView):
     model = Post
 
@@ -83,19 +93,20 @@ class UploadMarkdownView(LoginRequiredMixin, View):
         if form.is_valid():
             title = form.cleaned_data['title']
             file = form.cleaned_data['file']
+            category = form.cleaned_data['category']
             content = file.read().decode('utf-8')
             content_html = markdown.markdown(content)
 
             post = Post.objects.create(
                 title=title,
                 content=content,
+                category=category,
                 author=request.user
             )
             post.content_html = content_html  # Set the content_html field separately
             post.save()
             return redirect('post-detail', slug=post.slug)
         return render(request, 'blog/upload_markdown.html', {'form': form})
-
 def robots_txt(request):
     lines = [
         "User-Agent: *",

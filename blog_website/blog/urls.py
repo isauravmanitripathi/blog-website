@@ -1,5 +1,14 @@
 from django.urls import path
-from .views import PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, UserPostListView, UploadMarkdownView, robots_txt
+from .views import( PostListView,
+                    PostDetailView,
+                    PostCreateView,
+                    PostUpdateView,
+                    PostDeleteView,
+                    UserPostListView,
+                    UploadMarkdownView,
+                    CategoryPostListView,
+                    robots_txt
+                    )
 from . import views
 
 urlpatterns = [
@@ -13,5 +22,6 @@ urlpatterns = [
     #path('', views.home, name='blog-home'),
     path('about/', views.about, name='blog-about'),
     path('robots.txt', robots_txt, name='robots-txt'),
+    path('category/<str:category>/', CategoryPostListView.as_view(), name='category-posts'),
 ]
 

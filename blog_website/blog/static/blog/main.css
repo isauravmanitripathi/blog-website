@@ -87,3 +87,9 @@ ul {
 .account-heading {
   font-size: 2.5rem;
 }
+
+.sidebar-section {
+  position: sticky;
+  top: 20px;
+  padding-top: 20px;
+}

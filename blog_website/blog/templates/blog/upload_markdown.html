@@ -1,10 +1,18 @@
 <!-- blog/templates/blog/upload_markdown.html -->
 {% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+
 {% block content %}
-  <h2>Upload Markdown File</h2>
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Upload</button>
-  </form>
+  <div class="content-section">
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <fieldset class="form-group">
+        <legend class="border-bottom mb-4">Upload Markdown</legend>
+        {{ form|crispy }}
+      </fieldset>
+      <div class="form-group">
+        <button class="btn btn-outline-info" type="submit">Upload</button>
+      </div>
+    </form>
+  </div>
 {% endblock content %}

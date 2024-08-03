@@ -3,11 +3,13 @@
 {% block content %}
     {% for post in posts %}
         <article class="media content-section">
-            <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
             <div class="media-body">
                 <div class="article-metadata">
                     <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
                     <small class="text-muted">{{ post.date_posted | date:"F d, Y" }}</small>
+                    <small class="text-muted">
+                        <a href="{% url 'category-posts' post.category %}">{{ post.get_category_display }}</a>
+                    </small>
                 </div>
                 <h2><a class="article-title" href="{% url 'post-detail' slug=post.slug %}">{{ post.title }}</a></h2>
                 <p class="article-content">{{ post.get_snippet|safe }}</p>
