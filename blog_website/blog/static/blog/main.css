@@ -123,3 +123,13 @@ ul {
 .category-item a:hover {
   color: #000000;
 }
+
+footer {
+  background-color: #5f788a;
+  color: white;
+  padding: 20px 0;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}
