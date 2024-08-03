@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 import markdown
 from autoslug import AutoSlugField
 from django.urls import reverse
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
+from .algolia_utils import index_post, delete_post
 
 class Post(models.Model):
     CATEGORY_CHOICES = [
@@ -49,3 +52,11 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('post-detail', kwargs={'slug': self.slug})
+
+@receiver(post_save, sender=Post)
+def save_post(sender, instance, **kwargs):
+    index_post(instance)
+
+@receiver(post_delete, sender=Post)
+def delete_post_signal(sender, instance, **kwargs):
+    delete_post(instance)

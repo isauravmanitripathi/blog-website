@@ -3,11 +3,14 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User
-from .models import Post
 from django.views import View
 from django.http import HttpResponse
-from .forms import MarkdownUploadForm
+from django.conf import settings
+from algoliasearch.search_client import SearchClient
 import markdown
+import logging
+from .models import Post
+from .forms import MarkdownUploadForm
 
 def get_categories():
     return dict(Post.CATEGORY_CHOICES)
@@ -155,3 +158,12 @@ def robots_txt(request):
         "Sitemap: http://127.0.0.1:8000/sitemap.xml",
     ]
     return HttpResponse("\n".join(lines), content_type="text/plain")
+
+def search(request):
+    query = request.GET.get('query', '')
+    client = SearchClient.create(settings.ALGOLIA_APP_ID, settings.ALGOLIA_SEARCH_API_KEY)
+    index = client.init_index(settings.ALGOLIA_INDEX_NAME)
+    results = []
+    if query:
+        results = index.search(query)['hits']
+    return render(request, 'blog/search_results.html', {'results': results, 'query': query})

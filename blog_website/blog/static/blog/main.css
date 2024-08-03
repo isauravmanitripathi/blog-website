@@ -2,6 +2,19 @@ body {
   background: #fafafa;
   color: #333333;
   margin-top: 5rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.site-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex-grow: 1;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -34,6 +47,7 @@ ul {
   border: 1px solid #dddddd;
   border-radius: 3px;
   margin-bottom: 20px;
+  word-wrap: break-word; /* Ensures text wraps correctly */
 }
 
 .article-link-wrapper {
@@ -52,6 +66,7 @@ ul {
 
 .article-content {
   white-space: pre-line;
+  overflow-wrap: break-word; /* Ensures text wraps inside the box */
 }
 
 .article-img {
@@ -125,11 +140,5 @@ ul {
 }
 
 footer {
-  background-color: #5f788a;
-  color: white;
-  padding: 20px 0;
-  position: relative;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
+  margin-top: auto; /* Pushes footer to the bottom */
 }

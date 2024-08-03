@@ -7,6 +7,7 @@ from .views import( PostListView,
                     UserPostListView,
                     UploadMarkdownView,
                     CategoryPostListView,
+					search,
                     robots_txt
                     )
 from . import views
@@ -23,5 +24,6 @@ urlpatterns = [
     path('about/', views.about, name='blog-about'),
     path('robots.txt', robots_txt, name='robots-txt'),
     path('category/<str:category>/', CategoryPostListView.as_view(), name='category-posts'),
+	path('search/', search, name='search'),
 ]
 
