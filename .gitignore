@@ -1,2 +1,3 @@
 blog-venv/
 .env
+algolia_config.py

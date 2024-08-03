@@ -7,6 +7,8 @@ from django.urls import reverse
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from .algolia_utils import index_post, delete_post
+import re
+from django.utils.text import Truncator
 
 class Post(models.Model):
     CATEGORY_CHOICES = [
@@ -36,10 +38,13 @@ class Post(models.Model):
     date_posted = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='General Science')
+    short_description = models.CharField(max_length=200, blank=True)
 
     def save(self, *args, **kwargs):
         if self.content:
             self.content_html = markdown.markdown(self.content)
+            first_paragraph = re.split(r'\n\n+', self.content.strip())[0]
+            self.short_description = Truncator(first_paragraph).chars(200)
         super().save(*args, **kwargs)
 
     def __str__(self):
